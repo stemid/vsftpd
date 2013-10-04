@@ -17,7 +17,7 @@ class User:
         self._c = conn.cursor()
         self._db = conn
 
-        # Init system commands here already to catch possible exceptions
+        # Init system commands here to catch possible exceptions early
         self._useradd = sh.Command(s.useradd_binary)
         self._id = sh.Command(s.id_binary)
         self._setquota = sh.Command(s.setquota_binary)
@@ -77,4 +77,4 @@ class User:
         userdel = sh.Command(s.userdel_binary)
         userdel(username)
 
-    def adduser(self, username, home):
+    def adduser(self, username, password, home=None, groups=None):

@@ -28,9 +28,9 @@ class User:
         rows = 0
         rows = c.execute(
             '''
-            select %{db_users_id} 
-            from %{db_table_users} 
-            where %{db_users_name}='%{username}'
+            select {db_users_id} 
+            from {db_table_users} 
+            where {db_users_name}='{username}'
             '''
         ).format(
             db_users_id = s.db_users_id,
@@ -44,9 +44,9 @@ class User:
         c = self._c
         c.execute(
             '''
-            insert into %{db_table_users} 
-            (%{db_users_name}, %{db_users_password})
-            values ('%{username}', md5('%{password}'))
+            insert into {db_table_users} 
+            ({db_users_name}, {db_users_password})
+            values ('{username}', md5('{password}'))
             '''
         ).format(
             db_table_users = s.db_table_users,
@@ -60,8 +60,8 @@ class User:
         c = self._c
         c.execute(
             '''
-            delete from %{db_table_users}
-            where username = '%{username}'
+            delete from {db_table_users}
+            where username = '{username}'
             '''
         ).format(
             db_table_users = s.db_table_users,

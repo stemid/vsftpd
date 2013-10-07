@@ -18,10 +18,10 @@ class User:
         self._db = conn
 
         # Init system commands here to catch possible exceptions early
-        self._useradd = sh.Command(s.useradd_binary)
-        self._userdel = sh.Command(s.userdel_binary)
-        self._id = sh.Command(s.id_binary)
-        self._setquota = sh.Command(s.setquota_binary)
+        #self._useradd = sh.Command(s.useradd_binary)
+        #self._userdel = sh.Command(s.userdel_binary)
+        #self._id = sh.Command(s.id_binary)
+        #self._setquota = sh.Command(s.setquota_binary)
 
     def _db_is_user(self, username):
         c = self._c
@@ -68,10 +68,10 @@ class User:
         )
 
     def _sys_is_user(self, username):
-        return self._id(username)
+        return id(username)
 
     def _sys_add_user(self, username, home_dir):
-        self._useradd(
+        useradd(
             '-d',
             home_dir,
             '-m',
@@ -79,7 +79,6 @@ class User:
         )
 
     def _sys_del_user(self, username):
-        userdel = sh.Command(s.userdel_binary)
         userdel(username)
 
     def adduser(self, username, password, home=None, groups=None):

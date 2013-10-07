@@ -118,7 +118,7 @@ class User:
             exc_str2 = str(e)
             pass
         
-        if exc_str1 not None or exc_str2 not None:
+        if exc_str1 is not None or exc_str2 is not None:
             return (exc_str1, exc_str2)
         return True
 

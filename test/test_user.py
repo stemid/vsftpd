@@ -36,4 +36,4 @@ class UserTest(unittest.TestCase):
         assert user.deluser(self.username)
 
 if __name__ == '__main__':
-    unittest(main)
+    unittest.main()

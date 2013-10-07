@@ -31,12 +31,12 @@ class User:
             select {db_users_id} 
             from {db_table_users} 
             where {db_users_name}='{username}'
-            '''
-        ).format(
-            db_users_id = s.db_users_id,
-            db_table_users = s.db_table_users,
-            db_users_name = s.db_users_name,
-            username = username
+            '''.format(
+                db_users_id = s.db_users_id,
+                db_table_users = s.db_table_users,
+                db_users_name = s.db_users_name,
+                username = username
+            )
         )
         return rows
 
@@ -47,12 +47,12 @@ class User:
             insert into {db_table_users} 
             ({db_users_name}, {db_users_password})
             values ('{username}', md5('{password}'))
-            '''
-        ).format(
-            db_table_users = s.db_table_users,
-            db_users_name = s.db_users_name,
-            username = username,
-            password = password
+            '''.format(
+                db_table_users = s.db_table_users,
+                db_users_name = s.db_users_name,
+                username = username,
+                password = password
+            )
         )
         self._db.commit()
 
@@ -62,10 +62,10 @@ class User:
             '''
             delete from {db_table_users}
             where username = '{username}'
-            '''
-        ).format(
-            db_table_users = s.db_table_users,
-            username = username
+            '''.format(
+                db_table_users = s.db_table_users,
+                username = username
+            )
         )
 
     def _sys_is_user(self, username):

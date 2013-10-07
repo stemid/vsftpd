@@ -19,15 +19,15 @@ class UserTest(unittest.TestCase):
         m = md5(u.bytes)
         self.username = m.hexdigest()[:16]
 
+        # Use full username as temporary password
+        self.password = m.hexdigest()
+
         self.user = User()
 
     def test_add_user(self):
-        # Use full username as temporary password
-        password = m.hexdigest()
-
         home = '/home/' + self.username
 
-        assert self.user.adduser(self.username, password, home)
+        assert self.user.adduser(self.username, self.password, home)
 
     def test_delete_user(self):
         assert self.user.deluser(self.username)

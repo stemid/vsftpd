@@ -14,23 +14,20 @@ class UserTest(unittest.TestCase):
         unittest.main()
 
     def setUp(self):
-        self.user = User()
-
-    def test_add_user(self):
         # Generate random 16 byte username
         u = uuid4()
         m = md5(u.bytes)
-        username = m.hexdigest()[:16]
+        self.username = m.hexdigest()[:16]
 
-        # Export it to the class for delete_user test
-        self.username = username
+        self.user = User()
 
+    def test_add_user(self):
         # Use full username as temporary password
         password = m.hexdigest()
 
-        home = '/home/' + username
+        home = '/home/' + self.username
 
-        assert self.user.adduser(username, password, home)
+        assert self.user.adduser(self.username, password, home)
 
     def test_delete_user(self):
         assert self.user.deluser(self.username)

@@ -1,5 +1,5 @@
 import MySQLdb as mysql
-from sh import useradd, userdel, id, setquota
+from sh import sudo, id
 
 from Settings import Settings
 s = Settings()
@@ -71,7 +71,7 @@ class User:
         return id(username)
 
     def _sys_add_user(self, username, home_dir):
-        useradd(
+        sudo.useradd(
             '-d',
             home_dir,
             '-m',
@@ -79,7 +79,7 @@ class User:
         )
 
     def _sys_del_user(self, username):
-        userdel(username)
+        sudo.userdel(username)
 
     def adduser(self, username, password, home=None, groups=None):
         db_users = self._db_is_user(username)

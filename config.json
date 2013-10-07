@@ -5,7 +5,6 @@
     "i18n_path": "i18n",
     "locale": "sv_SE",
     "date_format": "%Y-%m-%d",
-    
     "db_host": "",
     "db_user": "root",
     "db_pass": "",
@@ -14,9 +13,8 @@
     "db_users_id": "accountid",
     "db_users_name": "username",
     "db_users_password": "password",
-
     "useradd_binary": "/usr/sbin/useradd",
     "userdel_binary": "/usr/sbin/userdel",
     "id_binary": "/usr/bin/id",
-    "setquota_binary": "/usr/sbin/setquota",
+    "setquota_binary": "/usr/sbin/setquota"
 }

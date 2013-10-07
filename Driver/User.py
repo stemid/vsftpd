@@ -1,5 +1,5 @@
-import sh
 import MySQLdb as mysql
+from sh import useradd, userdel, id, setquota
 
 from Settings import Settings
 s = Settings()

@@ -35,6 +35,7 @@ class User:
         ).format(
             db_users_id = s.db_users_id,
             db_table_users = s.db_table_users,
+            db_users_name = s.db_users_name,
             username = username
         )
         return rows

@@ -17,12 +17,6 @@ class User:
         self._c = conn.cursor()
         self._db = conn
 
-        # Init system commands here to catch possible exceptions early
-        #self._useradd = sh.Command(s.useradd_binary)
-        #self._userdel = sh.Command(s.userdel_binary)
-        #self._id = sh.Command(s.id_binary)
-        #self._setquota = sh.Command(s.setquota_binary)
-
     def _db_is_user(self, username):
         c = self._c
         rows = 0
@@ -90,7 +84,7 @@ class User:
         try:
             sys_user = self._sys_is_user(username)
         except ErrorReturnCode_1 as e:
-            raise UserError('User already exists in system')
+            raise UserError('User already exists in system: %s' % str(e))
         except Exception as e:
             raise UserError('User could not be created')
 

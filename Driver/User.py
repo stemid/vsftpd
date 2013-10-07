@@ -1,5 +1,5 @@
 import MySQLdb as mysql
-from sh import sudo, id
+from sh import sudo, id, ErrorReturnCode_1
 
 from Settings import Settings
 s = Settings()
@@ -89,7 +89,7 @@ class User:
 
         try:
             sys_user = self._sys_is_user(username)
-        except sh.ErrorReturnCode_1 as e:
+        except ErrorReturnCode_1 as e:
             raise UserError('User already exists in system')
         except Exception as e:
             raise UserError('User could not be created')

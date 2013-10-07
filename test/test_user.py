@@ -30,10 +30,10 @@ class UserTest(unittest.TestCase):
 
         home = '/home/' + username
 
-        assert user.adduser(username, password, home)
+        assert self.user.adduser(username, password, home)
 
     def test_delete_user(self):
-        assert user.deluser(self.username)
+        assert self.user.deluser(self.username)
 
 if __name__ == '__main__':
     unittest.main()

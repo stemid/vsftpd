@@ -1,3 +1,5 @@
+#!/usr/bin/env python -i
+
 import unittest
 from sys import path
 from os.path import join, abspath, dirname

@@ -53,7 +53,7 @@ add_argument(
 add_argument(
     'username',
     nargs = 1,
-    default = None,
+    default = '',
     metavar = 'user',
     help = 'Users login name'
 )
@@ -64,4 +64,3 @@ print args.groups
 print args.directory
 print args.password
 print args.username
-

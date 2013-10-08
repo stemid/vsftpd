@@ -49,4 +49,4 @@ parser.add_option(
 
 (opts, args) = parser.parse_args()
 
-print dir(args)
+print args

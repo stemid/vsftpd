@@ -101,6 +101,7 @@ class User:
 
         self._db_add_user(username, password)
         self._sys_add_user(username, home, groups)
+        return True
 
     def deluser(self, username):
         (exc_str1, exc_str2) = (None, None)

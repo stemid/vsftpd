@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-import argparse
+try:
+    import argparse
+except:
+    import optparse
+
 from Driver.User import User
 
 user = User()

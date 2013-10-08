@@ -2,20 +2,7 @@
 
 from sys import path
 from os.path import join, abspath, dirname
-try:
-    import argparse
-    parser = argparse.ArgumentParser(
-        description = 'Add a vsftpd user',
-        epilog = 'By Stefan.Midjich@cygate.se'
-    )
-    add_argument = parser.add_argument
-except:
-    import optparse
-    parser = optparse.OptionParser(
-        description = 'Add a vsftpd user',
-        epilog = 'By Stefan.Midjich@cygate.se'
-    )
-    add_argument = parser.add_option
+import optparse
 
 path.append(join(abspath(dirname(__file__)), '..'))
 
@@ -23,7 +10,12 @@ from Driver.User import User
 
 user = User()
 
-add_argument(
+parser = optparse.OptionParser(
+    description = 'Add a vsftpd user',
+    epilog = 'By Stefan.Midjich@cygate.se'
+)
+
+parser.add_option(
     '-g', '--groups',
     nargs = 1,
     default = None,
@@ -32,7 +24,7 @@ add_argument(
     help = 'Comma-separated list of additional group memberships'
 )
 
-add_argument(
+parser.add_option(
     '-d', '--directory',
     nargs = 1,
     default = None,
@@ -41,7 +33,7 @@ add_argument(
     help = 'Home directory of user'
 )
 
-add_argument(
+parser.add_option(
     '-p', '--password',
     nargs = 1,
     default = None,
@@ -50,7 +42,7 @@ add_argument(
     help = 'Password of user'
 )
 
-add_argument(
+parser.add_option(
     '-u', '--username',
     nargs = 1,
     default = '',

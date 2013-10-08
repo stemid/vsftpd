@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
+from sys import path
+from os.path import join, abspath, dirname
 try:
     import argparse
 except:
     import optparse
+
+path.append(join(abspath(dirname(__file__)), '..'))
 
 from Driver.User import User
 

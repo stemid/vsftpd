@@ -44,6 +44,7 @@ class User:
             '''.format(
                 db_table_users = s.db_table_users,
                 db_users_name = s.db_users_name,
+                db_users_password = s.db_users_password,
                 username = username,
                 password = password
             )

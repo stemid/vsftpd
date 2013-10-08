@@ -83,9 +83,8 @@ class User:
 
         try:
             sys_user = self._sys_is_user(username)
-        except ErrorReturnCode_1 as e:
-            print username
-            raise UserError('User already exists in system: %s' % str(e).encode('utf-8'))
+        except ErrorReturnCode_1:
+            raise
         except Exception as e:
             raise UserError('User could not be created')
 

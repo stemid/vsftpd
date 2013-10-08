@@ -30,7 +30,7 @@ class UserTest(unittest.TestCase):
         assert self.user.adduser(
             self.username.encode('utf-8'), 
             self.password.encode('utf-8'), 
-            home
+            home.encode('utf-8')
         )
 
     def test_delete_user(self):

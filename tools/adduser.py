@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sys import path
+from sys import path, exit
 from os.path import join, abspath, dirname
 import optparse
 
@@ -39,14 +39,10 @@ parser.add_option(
     help = 'Password of user'
 )
 
-parser.add_option(
-    '-u', '--username',
-    action = 'store',
-    type = 'string',
-    metavar = 'user',
-    help = 'Users login name'
-)
-
 (opts, args) = parser.parse_args()
 
-print args
+try:
+    username = args[0]
+except:
+    parser.print_usage()
+    sys.exit(1)

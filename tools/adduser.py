@@ -4,19 +4,22 @@ from sys import path
 from os.path import join, abspath, dirname
 try:
     import argparse
+    parser = argparse.ArgumentParser(
+        description = 'Add a vsftpd user',
+        epilog = 'By Stefan.Midjich@cygate.se'
+    )
 except:
     import optparse
+    parser = optparse.ArgumentParser(
+        description = 'Add a vsftpd user',
+        epilog = 'By Stefan.Midjich@cygate.se'
+    )
 
 path.append(join(abspath(dirname(__file__)), '..'))
 
 from Driver.User import User
 
 user = User()
-
-parser = argparse.ArgumentParser(
-    description = 'Add a vsftpd user',
-    epilog = 'By Stefan.Midjich@cygate.se'
-)
 
 parser.add_argument(
     '-g', '--groups',

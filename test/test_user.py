@@ -28,9 +28,9 @@ class UserTest(unittest.TestCase):
         home = '/home/' + self.username
 
         assert self.user.adduser(
-            self.username.encode('utf-8'), 
-            self.password.encode('utf-8'), 
-            home.encode('utf-8')
+            self.username, 
+            self.password, 
+            home
         )
 
     def test_delete_user(self):

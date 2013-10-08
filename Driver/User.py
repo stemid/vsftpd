@@ -83,10 +83,8 @@ class User:
 
         try:
             sys_user = self._sys_is_user(username)
-        except ErrorReturnCode_1:
-            raise
         except Exception as e:
-            raise UserError('User could not be created')
+            raise UserError('User already exists in system')
 
         try:
             self._db_add_user(username, password)

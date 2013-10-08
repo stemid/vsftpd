@@ -8,12 +8,14 @@ try:
         description = 'Add a vsftpd user',
         epilog = 'By Stefan.Midjich@cygate.se'
     )
+    add_argument = parser.add_argument
 except:
     import optparse
     parser = optparse.OptionParser(
         description = 'Add a vsftpd user',
         epilog = 'By Stefan.Midjich@cygate.se'
     )
+    add_argument = parser.add_option
 
 path.append(join(abspath(dirname(__file__)), '..'))
 
@@ -21,7 +23,7 @@ from Driver.User import User
 
 user = User()
 
-parser.add_argument(
+add_argument(
     '-g', '--groups',
     nargs = 1,
     default = None,
@@ -30,7 +32,7 @@ parser.add_argument(
     help = 'Comma-separated list of additional group memberships'
 )
 
-parser.add_argument(
+add_argument(
     '-d', '--directory',
     nargs = 1,
     default = None,
@@ -39,7 +41,7 @@ parser.add_argument(
     help = 'Home directory of user'
 )
 
-parser.add_argument(
+add_argument(
     '-p', '--password',
     nargs = 1,
     default = None,
@@ -48,7 +50,7 @@ parser.add_argument(
     help = 'Password of user'
 )
 
-parser.add_argument(
+add_argument(
     'username',
     nargs = 1,
     default = None,

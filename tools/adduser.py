@@ -19,7 +19,6 @@ parser.add_option(
     '-g', '--groups',
     nargs = 1,
     default = None,
-    dest = 'groups',
     metavar = 'sudo,staff',
     help = 'Comma-separated list of additional group memberships'
 )
@@ -28,7 +27,6 @@ parser.add_option(
     '-d', '--directory',
     nargs = 1,
     default = None,
-    dest = 'directory',
     metavar = '/home/user',
     help = 'Home directory of user'
 )
@@ -37,7 +35,6 @@ parser.add_option(
     '-p', '--password',
     nargs = 1,
     default = None,
-    dest = 'password',
     metavar = 'Secret2013',
     help = 'Password of user'
 )

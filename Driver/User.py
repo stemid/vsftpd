@@ -90,8 +90,8 @@ class User:
 
         try:
             self._db_add_user(username, password)
-        except:
-            raise UserError('User could not be created in DB')
+        except Exception as e:
+            raise UserError('User could not be created in DB: %s' % str(e))
 
         try:
             self._sys_add_user(username, home, groups)

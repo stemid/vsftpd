@@ -49,7 +49,4 @@ parser.add_option(
 
 (opts, args) = parser.parse_args()
 
-print opts.groups
-print opts.directory
-print opts.password
-print opts.username
+print dir(args)

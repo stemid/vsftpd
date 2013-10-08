@@ -47,7 +47,7 @@ parser.add_option(
     help = 'Users login name'
 )
 
-args = parser.parse_args()
+(opts, args) = parser.parse_args()
 
 print dir(args)
 print args.groups

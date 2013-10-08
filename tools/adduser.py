@@ -51,7 +51,7 @@ add_argument(
 )
 
 add_argument(
-    'username',
+    '-u', '--username',
     nargs = 1,
     default = '',
     metavar = 'user',

@@ -63,7 +63,11 @@ class User:
         )
 
     def _sys_is_user(self, username):
-        return id(username)
+        try:
+            sys_user = id(username)
+        except ErrorReturnCode_1 as e:
+            return False
+        return True
 
     def _sys_add_user(self, username, home_dir):
         sudo.useradd(
@@ -81,23 +85,11 @@ class User:
         if db_users >= 1:
             raise UserError('User already exists in DB')
 
-        try:
-            sys_user = self._sys_is_user(username)
-        except ErrorReturnCode_1:
-            pass # No such user
-        except Exception as e:
-            raise UserError('User could not be created')
+        if self._sys_is_user(username):
+            raise UserError('User already exists in system')
 
-        try:
-            self._db_add_user(username, password)
-        except Exception as e:
-            raise UserError('User could not be created in DB: %s' % str(e))
-
-        try:
-            self._sys_add_user(username, home, groups)
-        except:
-            self._db_del_user(username)
-            raise UserError('User could not be created in system')
+        self._db_add_user(username, password)
+        self._sys_add_user(username, home, groups)
 
     def deluser(self, username):
         (exc_str1, exc_str2) = (None, None)

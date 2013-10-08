@@ -10,7 +10,7 @@ try:
     )
 except:
     import optparse
-    parser = optparse.ArgumentParser(
+    parser = optparse.OptionParser(
         description = 'Add a vsftpd user',
         epilog = 'By Stefan.Midjich@cygate.se'
     )

@@ -70,13 +70,23 @@ class User:
             return False
         return True
 
-    def _sys_add_user(self, username, home_dir):
-        sudo.useradd(
-            '-d',
-            home_dir,
-            '-m',
-            username
-        )
+    def _sys_add_user(self, username, home_dir, groups=None):
+        if not groups:
+            sudo.useradd(
+                '-d',
+                home_dir,
+                '-m',
+                username
+            )
+        else:
+            sudo.useradd(
+                '-G',
+                groups,
+                '-d',
+                home_dir,
+                '-m',
+                username
+            )
 
     def _sys_del_user(self, username):
         sudo.userdel(username)

@@ -18,24 +18,24 @@ parser = optparse.OptionParser(
 parser.add_option(
     '-g', '--groups',
     action = 'store',
-    type = 'string',
     metavar = 'sudo,staff',
+    type = 'string',
     help = 'Comma-separated list of additional group memberships'
 )
 
 parser.add_option(
     '-d', '--directory',
     action = 'store',
-    type = 'string',
     metavar = '/home/user',
+    type = 'string',
     help = 'Home directory of user'
 )
 
 parser.add_option(
     '-p', '--password',
     action = 'store',
-    type = 'string',
     metavar = 'Secret2013',
+    type = 'string',
     help = 'Password of user'
 )
 
@@ -46,3 +46,5 @@ try:
 except:
     parser.print_usage()
     sys.exit(1)
+
+

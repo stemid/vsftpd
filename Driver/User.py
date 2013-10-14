@@ -71,10 +71,7 @@ class User:
         return True
 
     def _sys_is_group(self, groupname):
-        try:
-            sys_group = grep('^' + groupname, '/etc/group')
-        except ErrorReturnCode_1:
-            return False
+        sys_group = grep('^' + groupname, '/etc/group')
         return True
 
     def _sys_add_user(self, username, home_dir, groups=None):
@@ -100,14 +97,19 @@ class User:
 
     def adduser(self, username, password, home=None, groups=None):
         if groups:
+            # Check if groups already exist so they can be used
             for group in groups.split(','):
-                if self._sys_is_group(group) is False:
-                    raise UserError('Group does not exist, create group first')
+                try:
+                    self._sys_is_group(group)
+                except:
+                    raise UserError('Group does not exist')
 
+        # Check if username exists in DB
         db_users = self._db_is_user(username)
         if db_users >= 1:
             raise UserError('User already exists in DB')
 
+        # Check if username exists in system
         if self._sys_is_user(username):
             raise UserError('User already exists in system')
 

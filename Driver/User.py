@@ -1,5 +1,5 @@
 import MySQLdb as mysql
-from sh import sudo, id, ErrorReturnCode_1
+from sh import sudo, id, grep, ErrorReturnCode_1
 
 from Settings import Settings
 s = Settings()
@@ -70,6 +70,13 @@ class User:
             return False
         return True
 
+    def _sys_is_group(self, groupname):
+        try:
+            sys_group = grep('^' + groupname, '/etc/groups')
+        except ErrorReturnCode_1:
+            return False
+        return True
+
     def _sys_add_user(self, username, home_dir, groups=None):
         if not groups:
             sudo.useradd(
@@ -92,6 +99,11 @@ class User:
         sudo.userdel(username)
 
     def adduser(self, username, password, home=None, groups=None):
+        if groups:
+            for group in groups.split(','):
+                if self._sys_is_group(group) is False:
+                    raise UserError('Group does not exist, create group first')
+
         db_users = self._db_is_user(username)
         if db_users >= 1:
             raise UserError('User already exists in DB')

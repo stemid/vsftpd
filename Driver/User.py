@@ -72,7 +72,7 @@ class User:
 
     def _sys_is_group(self, groupname):
         try:
-            sys_group = grep('^' + groupname, '/etc/groups')
+            sys_group = grep('^' + groupname, '/etc/group')
         except ErrorReturnCode_1:
             return False
         return True

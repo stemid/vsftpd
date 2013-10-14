@@ -47,8 +47,4 @@ except:
     parser.print_usage()
     sys.exit(1)
 
-try:
-    user.adduser(username, opts.password, opts.directory, opts.groups)
-except Exception as e:
-    print str(e)
-    sys.exit(1)
+

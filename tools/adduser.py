@@ -59,5 +59,7 @@ except:
 try:
     user.adduser(username, opts.password, opts.directory, opts.groups, opts.comment)
 except Exception as e:
-    print str(e)
+    print '%s was not imported: %s' % (username, str(e))
     exit(1)
+
+print '%s was imported.' % username

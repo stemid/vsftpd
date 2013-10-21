@@ -12,7 +12,8 @@ user = User()
 
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',
-    epilog = 'By Stefan.Midjich@cygate.se'
+    epilog = 'By Stefan.Midjich@cygate.se',
+    usage = 'Usage: %prog [options] <username>'
 )
 
 parser.add_option(
@@ -32,6 +33,14 @@ parser.add_option(
 )
 
 parser.add_option(
+    '-c', '--comment',
+    action = 'store',
+    metavar = 'User Name',
+    type = 'string',
+    help = 'User description'
+)
+
+parser.add_option(
     '-p', '--password',
     action = 'store',
     metavar = 'Secret2013',
@@ -48,7 +57,7 @@ except:
     exit(1)
 
 try:
-    user.adduser(username, opts.password, opts.directory, opts.groups)
+    user.adduser(username, opts.password, opts.directory, opts.groups, opts.comment)
 except Exception as e:
     print str(e)
     exit(1)

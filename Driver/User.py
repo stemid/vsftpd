@@ -74,28 +74,38 @@ class User:
         sys_group = grep('^' + groupname, '/etc/group')
         return True
 
-    def _sys_add_user(self, username, home_dir, groups=None):
-        if not groups:
-            sudo.useradd(
-                '-d',
-                home_dir,
-                '-m',
-                username
+    def _sys_add_user(self, username, home_dir, groups=None, comment=None):
+        if groups and not comment:
+            args = (
+                '-G', groups,
+                '-d', home_dir,
+                '-m', username
+            )
+        elif comment and not groups:
+            args = (
+                '-c', comment,
+                '-d', home_dir,
+                '-m', username
+            )
+        elif groups and comment:
+            args = (
+                '-G', groups,
+                '-c', comment,
+                '-d', home_dir,
+                '-m', username
             )
         else:
-            sudo.useradd(
-                '-G',
-                groups,
-                '-d',
-                home_dir,
-                '-m',
-                username
+            args = (
+                '-d', home_dir,
+                '-m', username
             )
+
+        sudo.useradd(*args)
 
     def _sys_del_user(self, username):
         sudo.userdel(username)
 
-    def adduser(self, username, password, home=None, groups=None):
+    def adduser(self, username, password, home=None, groups=None, comment=None):
         if groups:
             # Check if groups already exist so they can be used
             for group in groups.split(','):
@@ -114,7 +124,7 @@ class User:
             raise UserError('User already exists in system')
 
         self._db_add_user(username, password)
-        self._sys_add_user(username, home, groups)
+        self._sys_add_user(username, home, groups, comment)
         return True
 
     def deluser(self, username):

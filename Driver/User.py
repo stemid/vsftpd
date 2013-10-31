@@ -75,6 +75,8 @@ class User:
         return True
 
     def _sys_add_user(self, username, home_dir, groups=None, comment=None):
+        args = ('-d', home_dir, '-m', username)
+
         if groups and not comment:
             args = (
                 '-G', groups,
@@ -127,7 +129,7 @@ class User:
         self._sys_add_user(username, home, groups, comment)
         return True
 
-    def deluser(self, username):
+    def deluser(self, username, groups):
         (exc_str1, exc_str2) = (None, None)
         try:
             self._db_del_user(username)
@@ -142,6 +144,12 @@ class User:
         
         if exc_str1 is not None or exc_str2 is not None:
             return (exc_str1, exc_str2)
+        else:
+            for group in groups:
+                try:
+                    self._sys_del_group(group)
+                except Exception as e:
+                    
         return True
 
 class UserError(Exception):

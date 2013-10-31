@@ -12,7 +12,8 @@ user = User()
 
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',
-    epilog = 'By Stefan.Midjich@cygate.se'
+    epilog = 'By Stefan.Midjich@cygate.se',
+    usage = 'Usage: %prog [options] <username>'
 )
 
 parser.add_option(
@@ -23,22 +24,6 @@ parser.add_option(
     help = 'Comma-separated list of additional group memberships'
 )
 
-parser.add_option(
-    '-d', '--directory',
-    action = 'store',
-    metavar = '/home/user',
-    type = 'string',
-    help = 'Home directory of user'
-)
-
-parser.add_option(
-    '-p', '--password',
-    action = 'store',
-    metavar = 'Secret2013',
-    type = 'string',
-    help = 'Password of user'
-)
-
 (opts, args) = parser.parse_args()
 
 try:
@@ -47,4 +32,10 @@ except:
     parser.print_usage()
     sys.exit(1)
 
+try:
+    user.deluser(username, opts.groups)
+except Exception as e:
+    print '%s was not imported: %s' % (username, str(e))
+    exit(1)
 
+print '%s was imported.' % username

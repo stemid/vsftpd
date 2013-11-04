@@ -66,43 +66,38 @@ class User:
     def _sys_is_user(self, username):
         try:
             sys_user = id(username)
-        except ErrorReturnCode_1 as e:
+        except Exception as e:
             return False
         return True
 
     def _sys_is_group(self, groupname):
-        sys_group = grep('^' + groupname, '/etc/group')
+        try:
+            sys_group = grep('^' + groupname, '/etc/group')
+        except Exception as e:
+            return False
         return True
 
     def _sys_add_user(self, username, home_dir, groups=None, comment=None):
         args = ('-d', home_dir, '-m', username)
 
         if groups and not comment:
-            args = (
-                '-G', groups,
-                '-d', home_dir,
-                '-m', username
+            ex_args = (
+                '-G', groups
             )
         elif comment and not groups:
-            args = (
-                '-c', comment,
-                '-d', home_dir,
-                '-m', username
+            ex_args = (
+                '-c', comment
             )
         elif groups and comment:
-            args = (
+            ex_args = (
                 '-G', groups,
-                '-c', comment,
-                '-d', home_dir,
-                '-m', username
+                '-c', comment
             )
         else:
-            args = (
-                '-d', home_dir,
-                '-m', username
-            )
+            ex_args = ()
 
-        sudo.useradd(*args)
+        ex_args += args
+        sudo.useradd(*ex_args)
 
     def _sys_del_user(self, username):
         sudo.userdel(username)
@@ -129,27 +124,25 @@ class User:
         self._sys_add_user(username, home, groups, comment)
         return True
 
-    def deluser(self, username, groups):
-        (exc_str1, exc_str2) = (None, None)
-        try:
-            self._db_del_user(username)
-        except Exception as e:
-            exc_str1 = str(e)
-            pass
-        try:
-            self._sys_del_user(username)
-        except Exception as e:
-            exc_str2 = str(e)
-            pass
+    def deluser(self, username, groups=[]):
+        if self._db_is_user(username):
+            try:
+                self._db_del_user(username)
+            except Exception as e:
+                raise UserError('Could not delete user %s from db' % username)
+
+        if self._sys_is_user(username):
+            try:
+                self._sys_del_user(username)
+            except Exception as e:
+                raise UserError('Could not delete user %s from system' % username)
         
-        if exc_str1 is not None or exc_str2 is not None:
-            return (exc_str1, exc_str2)
-        else:
-            for group in groups:
+        for group in groups:
+            if self._sys_is_group(group):
                 try:
                     self._sys_del_group(group)
                 except Exception as e:
-                    
+                    raise UserError('Could not delete group %s from system' % group)
         return True
 
 class UserError(Exception):

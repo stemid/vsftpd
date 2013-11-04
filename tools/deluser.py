@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from sys import path, exit
+from __future__ import print_function
+from sys import path, exit, stderr
 from os.path import join, abspath, dirname
 import optparse
 
@@ -33,9 +34,9 @@ except:
     sys.exit(1)
 
 try:
-    user.deluser(username, opts.groups)
+    user.deluser(username, opts.groups.split(','))
 except Exception as e:
-    print '%s was not imported: %s' % (username, str(e))
+    print('User %s was not deleted: %s' % (username, str(e), file=stderr)
     exit(1)
 
-print '%s was imported.' % username
+print('%s was deleted.' % username)

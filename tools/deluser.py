@@ -31,7 +31,7 @@ try:
     username = args[0]
 except:
     parser.print_usage()
-    sys.exit(1)
+    exit(1)
 
 try:
     user.deluser(username, opts.groups.split(','))

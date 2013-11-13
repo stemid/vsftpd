@@ -118,17 +118,18 @@ class User:
         if self._sys_is_user(username):
             raise UserError('User already exists in system')
 
-        self._db_add_user(username, password)
-        self._sys_add_user(username, home, groups, comment)
-
         if groups:
             # Check if groups already exist so they can be used
             for group in groups.split(','):
+                if group == username:
+                    continue
                 try:
                     self._sys_is_group(group)
                 except:
                     self._sys_add_group(group)
 
+        self._db_add_user(username, password)
+        self._sys_add_user(username, home, groups, comment)
         return True
 
     def deluser(self, username, groups=[]):

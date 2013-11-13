@@ -32,6 +32,8 @@ class User:
                 username = username
             )
         )
+        if not len(rows):
+            return False
         return rows
 
     def _db_add_user(self, username, password):
@@ -137,7 +139,10 @@ class User:
             try:
                 self._db_del_user(username)
             except Exception as e:
-                raise UserError('Could not delete user %s from db' % username)
+                raise UserError('Could not delete user %s from db: %s' % (
+                    username,
+                    str(e)
+                ))
 
         if self._sys_is_user(username):
             try:

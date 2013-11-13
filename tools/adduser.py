@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from sys import path, exit
+from __future__ import print_function
+from sys import path, exit, stderr
 from os.path import join, abspath, dirname
 import optparse
 
@@ -59,7 +60,6 @@ except:
 try:
     user.adduser(username, opts.password, opts.directory, opts.groups, opts.comment)
 except Exception as e:
-    print '%s was not imported: %s' % (username, str(e))
-    exit(1)
+    print('Problem importing %s: %s' % (username, str(e)), file=stderr)
 
-print '%s was imported.' % username
+print('Finished importing %s' % username)

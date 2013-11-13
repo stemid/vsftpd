@@ -36,7 +36,6 @@ except:
 try:
     user.deluser(username, opts.groups.split(','))
 except Exception as e:
-    print('Exception while deleting user %s: %s' % (username, str(e)), file=stderr)
-    exit(1)
+    print('Problem deleting %s: %s' % (username, str(e)), file=stderr)
 
-print('%s was deleted.' % username)
+print('Finished deleting %s' % username)

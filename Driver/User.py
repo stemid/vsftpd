@@ -32,7 +32,7 @@ class User:
                 username = username
             )
         )
-        if not len(rows):
+        if rows <= 0:
             return False
         return rows
 
@@ -112,8 +112,7 @@ class User:
 
     def adduser(self, username, password, home=None, groups=None, comment=None):
         # Check if username exists in DB
-        db_users = self._db_is_user(username)
-        if db_users >= 1:
+        if self._db_is_user(username):
             raise UserError('User already exists in DB')
 
         # Check if username exists in system

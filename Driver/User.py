@@ -77,6 +77,9 @@ class User:
             return False
         return True
 
+    def _sys_add_group(self, group):
+        sudo.groupadd(group)
+
     def _sys_add_user(self, username, home_dir, groups=None, comment=None):
         args = ('-d', home_dir, '-m', username)
 
@@ -102,6 +105,9 @@ class User:
     def _sys_del_user(self, username):
         sudo.userdel(username)
 
+    def _sys_del_group(self, group):
+        sudo.groupdel(group)
+
     def adduser(self, username, password, home=None, groups=None, comment=None):
         if groups:
             # Check if groups already exist so they can be used
@@ -109,7 +115,7 @@ class User:
                 try:
                     self._sys_is_group(group)
                 except:
-                    raise UserError('Group does not exist')
+                    self._sys_add_group(group)
 
         # Check if username exists in DB
         db_users = self._db_is_user(username)

@@ -3,6 +3,7 @@
 from __future__ import print_function
 from sys import path, exit, stderr
 from os.path import join, abspath, dirname
+from signal import signal, SIGINT
 import optparse
 
 path.append(join(abspath(dirname(__file__)), '..'))
@@ -10,6 +11,12 @@ path.append(join(abspath(dirname(__file__)), '..'))
 from Driver.User import User
 
 user = User()
+
+def interrupt_handler(signal, frame):
+    print("Received interrupt, exiting...", file=stderr)
+    exit(1)
+
+signal(SIGINT, interrupt_handler)
 
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',

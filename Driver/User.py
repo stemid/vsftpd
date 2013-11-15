@@ -107,7 +107,7 @@ class User:
     def adduser(self, username, password, home=None, groups=None, comment=None):
         # Check if username exists in DB
         try:
-            self._db_is_user(username):
+            self._db_is_user(username)
         except UserError:
             pass
         except Exception as e:

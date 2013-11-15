@@ -33,8 +33,8 @@ class User:
             )
         )
         if rows <= 0:
-            return False
-        return True
+            raise UserError('User does not exist in db')
+        return rows
 
     def _db_add_user(self, username, password):
         c = self._c
@@ -66,14 +66,12 @@ class User:
         )
 
     def _sys_is_user(self, username):
-        try:
-            sys_user = id(username)
-        except Exception as e:
-            return False
-        return True
+        sys_user = id(username)
+        return sys_user
 
     def _sys_is_group(self, groupname):
         sys_group = grep('^' + groupname, '/etc/group')
+        return sys_group
 
     def _sys_add_group(self, group):
         sudo.groupadd(group)
@@ -108,8 +106,12 @@ class User:
 
     def adduser(self, username, password, home=None, groups=None, comment=None):
         # Check if username exists in DB
-        if self._db_is_user(username):
-            raise UserError('User already exists in DB')
+        try:
+            self._db_is_user(username):
+        except UserError:
+            pass
+        except Exception as e:
+            raise
 
         # Check if username exists in system
         if self._sys_is_user(username):
@@ -130,23 +132,23 @@ class User:
         return True
 
     def deluser(self, username, groups=[]):
-        if self._db_is_user(username):
-            try:
-                self._db_del_user(username)
-            except Exception as e:
-                raise UserError('Could not delete user %s from db: %s' % (
-                    username,
-                    str(e)
-                ))
+        try:
+            self._db_del_user(username)
+        except Exception as e:
+            raise UserError('Could not delete user %s from db: %s' % (
+                username,
+                str(e)
+            ))
 
-        if self._sys_is_user(username):
-            try:
-                self._sys_del_user(username)
-            except Exception as e:
-                raise UserError('Could not delete user %s from system' % username)
+        try:
+            self._sys_del_user(username)
+        except Exception as e:
+            raise UserError('Could not delete user %s from system' % username)
         
         for group in groups:
             if self._sys_is_group(group):
+                if group == username:
+                    continue
                 try:
                     self._sys_del_group(group)
                 except Exception as e:

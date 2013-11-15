@@ -73,11 +73,7 @@ class User:
         return True
 
     def _sys_is_group(self, groupname):
-        try:
-            sys_group = grep('^' + groupname, '/etc/group')
-        except Exception as e:
-            return False
-        return True
+        sys_group = grep('^' + groupname, '/etc/group')
 
     def _sys_add_group(self, group):
         sudo.groupadd(group)

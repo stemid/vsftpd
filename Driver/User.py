@@ -146,13 +146,12 @@ class User:
             raise UserError('Could not delete user %s from system' % username)
         
         for group in groups:
-            if self._sys_is_group(group):
-                if group == username:
-                    continue
-                try:
-                    self._sys_del_group(group)
-                except Exception as e:
-                    raise UserError('Could not delete group %s from system' % group)
+            if group == username:
+                continue
+            try:
+                self._sys_del_group(group)
+            except Exception as e:
+                raise UserError('Could not delete group %s from system' % group)
         return True
 
 class UserError(Exception):

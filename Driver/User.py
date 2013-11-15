@@ -34,7 +34,7 @@ class User:
         )
         if rows <= 0:
             return False
-        return rows
+        return True
 
     def _db_add_user(self, username, password):
         c = self._c

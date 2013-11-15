@@ -92,7 +92,7 @@ class User:
         elif groups and comment:
             ex_args = (
                 '-G', groups,
-                '-c', comment
+                '-c', "'" + comment + "'"
             )
         else:
             ex_args = ()

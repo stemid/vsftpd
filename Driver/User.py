@@ -118,14 +118,11 @@ class User:
         if groups:
             # Check if groups already exist so they can be used
             for group in groups.split(','):
-                print "DEBUG: Checking group: %s" % group
                 if group == username:
-                    print "DEBUG: Skipping group: %s" % group
                     continue
                 try:
                     self._sys_is_group(group)
                 except:
-                    print "DEBUG: Adding group: %s" % group
                     self._sys_add_group(group)
 
         self._db_add_user(username, password)

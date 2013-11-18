@@ -113,7 +113,7 @@ class User:
 
         # Check if username exists in system and add it
         try:
-            self._sys_is_user(username):
+            self._sys_is_user(username)
         except:
             self._sys_add_user(username, home, groups, comment)
 

@@ -91,7 +91,7 @@ class User:
         elif groups and comment:
             ex_args = (
                 '-G', ','.join(groups),
-                '-c', "'" + comment + "'"
+                '-c', "'" + comment.encode('utf-8') + "'"
             )
         else:
             ex_args = ()

@@ -76,7 +76,7 @@ class User:
     def _sys_add_group(self, group):
         sudo.groupadd(group)
 
-    def _sys_add_user(self, username, home_dir, groups=None, comment=None):
+    def _sys_add_user(self, username, home_dir, groups=[], comment=None):
         args = ('-d', home_dir, '-m', username)
 
         if groups and not comment:
@@ -89,7 +89,7 @@ class User:
             )
         elif groups and comment:
             ex_args = (
-                '-G', groups,
+                '-G', groups.split(','),
                 '-c', "'" + comment + "'"
             )
         else:
@@ -119,7 +119,7 @@ class User:
 
         if groups:
             # Check if groups already exist so they can be used
-            for group in groups.split(','):
+            for group in groups:
                 if group == username:
                     continue
                 try:

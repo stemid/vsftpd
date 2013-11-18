@@ -64,6 +64,7 @@ class User:
                 username = username
             )
         )
+        self._db.commit()
 
     def _sys_is_user(self, username):
         sys_user = id(username)

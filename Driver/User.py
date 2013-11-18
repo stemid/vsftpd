@@ -90,7 +90,7 @@ class User:
             )
         elif groups and comment:
             ex_args = (
-                '-G', groups.split(','),
+                '-G', ','.join(groups),
                 '-c', "'" + comment + "'"
             )
         else:

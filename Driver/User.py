@@ -106,6 +106,15 @@ class User:
         sudo.groupdel(group)
 
     def adduser(self, username, password, home=None, groups=[], comment=None):
+        # Check if groups already exist so they can be used
+        for group in groups:
+            if group == username:
+                continue
+            try:
+                self._sys_is_group(group)
+            except:
+                self._sys_add_group(group)
+
         # Check if username exists in DB and add it
         try:
             self._db_is_user(username)
@@ -117,16 +126,6 @@ class User:
             self._sys_is_user(username)
         except:
             self._sys_add_user(username, home, groups, comment)
-
-        if groups:
-            # Check if groups already exist so they can be used
-            for group in groups:
-                if group == username:
-                    continue
-                try:
-                    self._sys_is_group(group)
-                except:
-                    self._sys_add_group(group)
 
     def deluser(self, username, groups=[]):
         try:

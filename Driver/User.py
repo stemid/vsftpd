@@ -82,7 +82,7 @@ class User:
 
         if groups and not comment:
             ex_args = (
-                '-G', groups
+                '-G', ','.join(groups)
             )
         elif comment and not groups:
             ex_args = (

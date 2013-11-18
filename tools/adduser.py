@@ -60,6 +60,10 @@ except:
 try:
     user.adduser(username, opts.password, opts.directory, opts.groups.split(','), opts.comment)
 except Exception as e:
-    print('Problem importing user=%s, groups=%s: %s' % (username.encode('utf-8'), opts.groups.split(','), str(e)), file=stderr)
+    print('Problem importing user=%s, groups=%s: %s' % (
+        username.encode('utf-8'), 
+        opts.groups.split(','), 
+        str(e)
+    ), file=stderr)
 
 print('Finished importing %s' % username)

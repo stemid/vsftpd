@@ -104,18 +104,18 @@ class User:
     def _sys_del_group(self, group):
         sudo.groupdel(group)
 
-    def adduser(self, username, password, home=None, groups=None, comment=None):
-        # Check if username exists in DB
+    def adduser(self, username, password, home=None, groups=[], comment=None):
+        # Check if username exists in DB and add it
         try:
             self._db_is_user(username)
         except UserError:
-            pass
-        except Exception as e:
-            raise
+            self._db_add_user(username, password)
 
-        # Check if username exists in system
-        if self._sys_is_user(username):
-            raise UserError('User already exists in system')
+        # Check if username exists in system and add it
+        try:
+            self._sys_is_user(username):
+        except:
+            self._sys_add_user(username, home, groups, comment)
 
         if groups:
             # Check if groups already exist so they can be used
@@ -126,10 +126,6 @@ class User:
                     self._sys_is_group(group)
                 except:
                     self._sys_add_group(group)
-
-        self._db_add_user(username, password)
-        self._sys_add_user(username, home, groups, comment)
-        return True
 
     def deluser(self, username, groups=[]):
         try:
@@ -152,7 +148,6 @@ class User:
                 self._sys_del_group(group)
             except Exception as e:
                 raise UserError('Could not delete group %s from system' % group)
-        return True
 
 class UserError(Exception):
     def __init__(self, errstr):

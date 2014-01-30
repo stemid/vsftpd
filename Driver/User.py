@@ -24,13 +24,13 @@ class User:
             '''
             select {db_users_id} 
             from {db_table_users} 
-            where {db_users_name}='{username}'
+            where {db_users_name}=%s
             '''.format(
                 db_users_id = s.db_users_id,
                 db_table_users = s.db_table_users,
-                db_users_name = s.db_users_name,
-                username = username
-            )
+                db_users_name = s.db_users_name
+            ),
+            (username, )
         )
         if rows <= 0:
             raise UserError('User does not exist in db')
@@ -42,14 +42,13 @@ class User:
             '''
             insert into {db_table_users} 
             ({db_users_name}, {db_users_password})
-            values ('{username}', md5('{password}'))
+            values (%s, %s)
             '''.format(
                 db_table_users = s.db_table_users,
                 db_users_name = s.db_users_name,
-                db_users_password = s.db_users_password,
-                username = username,
-                password = password
-            )
+                db_users_password = s.db_users_password
+            ),
+            (username, password, )
         )
         self._db.commit()
 
@@ -58,11 +57,11 @@ class User:
         c.execute(
             '''
             delete from {db_table_users}
-            where username = '{username}'
+            where username = %s
             '''.format(
-                db_table_users = s.db_table_users,
-                username = username
-            )
+                db_table_users = s.db_table_users
+            ),
+            (username, )
         )
         self._db.commit()
 

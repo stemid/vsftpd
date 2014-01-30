@@ -106,7 +106,7 @@ if password:
     # Generate salt for encryption
     salt_chars = '/.' + string.ascii_letters + string.digits
     salt_string = [salt_chars[randint(0, len(salt_chars)-1)] for c in range(0, 8)]
-    salt = '$1$' + ''.join(salt_string) + '$'
+    salt = '$2$' + ''.join(salt_string) + '$'
 
     # Encrypt password
     encrypted_password = crypt(password, salt)

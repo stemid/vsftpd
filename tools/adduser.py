@@ -98,7 +98,7 @@ if opts.prompt:
         password = raw_input(password_prompt)
     finally:
         tcsetattr(stdin_fd, TCSADRAIN, old_stdin)
-        stdout.write('\n')
+        stdout.write('\n') # Makes the following printed line better
 else:
     password = opts.password
 

@@ -112,7 +112,7 @@ if password:
     encrypted_password = crypt(password, salt)
 
 try:
-    user.adduser(username, opts.password, opts.directory, opts.groups.split(','), opts.comment)
+    user.adduser(username, encrypted_password, opts.directory, opts.groups.split(','), opts.comment)
     #print(username, encrypted_password, opts.directory, opts.groups.split(','), opts.comment)
 except Exception as e:
     print('Problem importing user=%s, groups=%s: %s' % (

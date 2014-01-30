@@ -22,7 +22,14 @@ parser.add_option(
     action = 'store',
     metavar = 'sudo,staff',
     type = 'string',
-    help = 'Comma-separated list of additional group memberships'
+    help = 'Comma-separated list of additional groups to delete'
+)
+
+parser.add_option(
+    '-v', '--verbose',
+    action = 'store_true',
+    dest = 'verbose',
+    help = 'Verbose output'
 )
 
 (opts, args) = parser.parse_args()
@@ -37,5 +44,8 @@ try:
     user.deluser(username, opts.groups.split(','))
 except Exception as e:
     print('Problem deleting %s: %s' % (username, str(e)), file=stderr)
+    exit(1)
 
-print('Finished deleting %s' % username)
+if opts.verbose:
+    print('Finished deleting %s' % username)
+exit(0)

@@ -120,6 +120,7 @@ except Exception as e:
         opts.groups.split(','), 
         str(e)
     ), file=stderr)
+    exit(1)
 
 if opts.verbose:
     print('Finished importing %s' % username)

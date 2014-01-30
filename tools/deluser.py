@@ -21,6 +21,7 @@ parser.add_option(
     '-g', '--groups',
     action = 'store',
     metavar = 'sudo,staff',
+    default = '',
     type = 'string',
     help = 'Comma-separated list of additional groups to delete'
 )

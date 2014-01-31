@@ -6,10 +6,10 @@ from os.path import join, abspath, dirname
 import optparse
 
 from ConfigParser import ConfigParser
-s = ConfigParser()
+s = ConfigParser({'main': { 'path': '..' } })
 s.read('app.cfg')
 
-path.append(join(abspath(dirname(__file__)), '..'))
+path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))
 
 from Driver.User import User
 

@@ -14,8 +14,12 @@ class User:
         self._c = conn.cursor()
         self._db = conn
 
+        # Copy the configuration options globally
+        self._s = s
+
     def _db_is_user(self, username):
         c = self._c
+        s = self._s
         rows = 0
         rows = c.execute(
             '''
@@ -35,6 +39,7 @@ class User:
 
     def _db_add_user(self, username, password):
         c = self._c
+        s = self._s
         c.execute(
             '''
             insert into {db_table_users} 
@@ -51,6 +56,7 @@ class User:
 
     def _db_del_user(self, username):
         c = self._c
+        s = self._s
         c.execute(
             '''
             delete from {db_table_users}

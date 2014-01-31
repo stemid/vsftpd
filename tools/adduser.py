@@ -9,11 +9,15 @@ from crypt import crypt
 import string
 import optparse
 
+from ConfigParser import ConfigParser
+s = ConfigParser()
+s.read('app.cfg')
+
 path.append(join(abspath(dirname(__file__)), '..'))
 
 from Driver.User import User
 
-user = User()
+user = User(s)
 
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',

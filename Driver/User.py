@@ -1,17 +1,14 @@
 import MySQLdb as mysql
 from sh import sudo, id, grep, ErrorReturnCode_1
 
-from Settings import Settings
-s = Settings()
-
 class User:
-    def __init__(self):
+    def __init__(self, s):
         conn = mysql.connect(
-            host = s.db_host,
-            user = s.db_user,
-            passwd = s.db_pass,
-            db = s.db_name,
-            use_unicode = True
+            host = s.get('db', 'hostname'),
+            user = s.get('db', 'username'),
+            passwd = s.get('db', 'password'),
+            db = s.get('db', 'database'),
+            use_unicode = s.get('db', 'unicode')
         )
 
         self._c = conn.cursor()
@@ -26,9 +23,9 @@ class User:
             from {db_table_users} 
             where {db_users_name}=%s
             '''.format(
-                db_users_id = s.db_users_id,
-                db_table_users = s.db_table_users,
-                db_users_name = s.db_users_name
+                db_users_id = s.get('db', 'users_id'),
+                db_table_users = s.get('db', 'table_users'),
+                db_users_name = s.get('db', 'users_name')
             ),
             (username, )
         )
@@ -44,9 +41,9 @@ class User:
             ({db_users_name}, {db_users_password})
             values (%s, %s)
             '''.format(
-                db_table_users = s.db_table_users,
-                db_users_name = s.db_users_name,
-                db_users_password = s.db_users_password
+                db_table_users = s.get('db', 'table_users'),
+                db_users_name = s.get('db', 'users_name'),
+                db_users_password = s.get('db', 'users_password')
             ),
             (username, password, )
         )
@@ -59,7 +56,7 @@ class User:
             delete from {db_table_users}
             where username = %s
             '''.format(
-                db_table_users = s.db_table_users
+                db_table_users = s.get('db', 'table_users')
             ),
             (username, )
         )
@@ -127,13 +124,14 @@ class User:
             self._sys_add_user(username, home, groups, comment)
 
     def deluser(self, username, groups=[]):
-        for group in groups:
-            if group == username:
-                continue
-            try:
-                self._sys_del_group(group)
-            except Exception as e:
-                raise UserError('Could not delete group %s from system' % group)
+        if len(groups):
+            for group in groups:
+                if group == username:
+                    continue
+                try:
+                    self._sys_del_group(group)
+                except Exception as e:
+                    raise UserError('Could not delete group %s from system' % group)
 
         try:
             self._db_del_user(username)

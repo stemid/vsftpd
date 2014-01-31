@@ -10,7 +10,7 @@ import string
 import optparse
 
 from ConfigParser import ConfigParser
-s = ConfigParser({'main': { 'path': '..' } })
+s = ConfigParser()
 s.read('app.cfg')
 
 path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))

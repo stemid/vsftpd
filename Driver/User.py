@@ -124,14 +124,13 @@ class User:
             self._sys_add_user(username, home, groups, comment)
 
     def deluser(self, username, groups=[]):
-        if len(groups):
-            for group in groups:
-                if group == username:
-                    continue
-                try:
-                    self._sys_del_group(group)
-                except Exception as e:
-                    raise UserError('Could not delete group %s from system' % group)
+        for group in groups:
+            if group == username or group == '':
+                continue
+            try:
+                self._sys_del_group(group)
+            except Exception as e:
+                raise UserError('Could not delete group %s from system' % group)
 
         try:
             self._db_del_user(username)

@@ -35,7 +35,7 @@ parser = optparse.OptionParser(
 parser.add_option(
     '-g', '--groups',
     metavar = 'sudo,staff',
-    default = '',
+    default = 'ftp',
     type = 'string',
     help = 'Comma-separated list of additional group memberships'
 )

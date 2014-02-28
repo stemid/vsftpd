@@ -23,7 +23,7 @@ from Driver.User import User
 user = User(s)
 
 parser = optparse.OptionParser(
-    description = 'Add a vsftpd user',
+    description = 'Delete a vsftpd user',
     epilog = 'By Stefan.Midjich@cygate.se',
     usage = 'Usage: %prog [options] <username>'
 )

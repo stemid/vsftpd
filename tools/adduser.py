@@ -15,6 +15,10 @@ s.read('app.cfg')
 
 path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))
 
+# Add virtualenv to path if present in config
+if s.get('main', 'virtualenv'):
+    path.append(join(abspath(dirname(__file__)), s.get('main', 'virtualenv')))
+
 from Driver.User import User
 
 user = User(s)
@@ -27,7 +31,6 @@ parser = optparse.OptionParser(
 
 parser.add_option(
     '-g', '--groups',
-    action = 'store',
     metavar = 'sudo,staff',
     default = '',
     type = 'string',
@@ -36,18 +39,31 @@ parser.add_option(
 
 parser.add_option(
     '-d', '--directory',
-    action = 'store',
     metavar = '/home/user',
+    default = None,
     type = 'string',
     help = 'Home directory of user'
 )
 
 parser.add_option(
-    '-c', '--comment',
-    action = 'store',
-    metavar = 'User Name',
+    '-C', '--comment',
+    metavar = 'Firstname Lastname',
     type = 'string',
-    help = 'User description'
+    help = 'Account contact person'
+)
+
+parser.add_option(
+    '-E', '--email',
+    metavar = 'Email address',
+    type = 'string',
+    help = 'Contact persons e-mail address'
+)
+
+parser.add_option(
+    '-P', '--phone',
+    metavar = 'Phone #',
+    type = 'string',
+    help = 'Contact persons phone number'
 )
 
 parser.add_option(
@@ -59,7 +75,6 @@ parser.add_option(
 
 parser.add_option(
     '--password',
-    action = 'store',
     metavar = 'Secret2013',
     dest = 'password',
     type = 'string',
@@ -81,6 +96,9 @@ except:
     parser.error('Must specify username argument')
     parser.print_usage()
     exit(1)
+
+if not opts.directory:
+    opts.directory = s.get('system', 'home_dir') + '/' + username
 
 if opts.prompt and opts.password:
     parser.error('Options --prompt and --password are mutually exclusive.')

@@ -35,3 +35,5 @@ If you're using a virtualenv then modify app.cfg and uncomment the virtualenv li
     virtualenv: /home/me/.venvs/vsftpd/lib64/python2.6/site-packages
 
 Note that the above example is for a 64-bit system. 
+
+Also you can symlink app.cfg from /etc/vsftpd/app.cfg for global scripts.

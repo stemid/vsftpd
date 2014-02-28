@@ -2,9 +2,15 @@
 
 This is an attempt to make a Vsftpd+pam\_mysql+MariaDB server easier to manage. 
 
+Check app.cfg for configuration options.
+
 # Driver
 
 This is a module that handles user creation in DB and in system. 
+
+## DB Schema
+
+This interface works with the DB schema in tools/vsftpd.sql.
 
 # Tools
 

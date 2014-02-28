@@ -11,6 +11,13 @@ s.read(['app.cfg', '/etc/vsftpd/app.cfg'])
 
 path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))
 
+# Add virtualenv to path if present in config. 
+# This happens before Driver.User is initiated so it can find the sh module. 
+try:
+    path.append(join(abspath(dirname(__file__)), s.get('main', 'virtualenv')))
+except:
+    pass
+
 from Driver.User import User
 
 user = User(s)

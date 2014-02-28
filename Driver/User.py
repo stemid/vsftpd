@@ -34,23 +34,39 @@ class User:
             (username, )
         )
         if rows <= 0:
-            raise UserError('User does not exist in db')
+            raise DriverError('User does not exist in db')
         return rows
 
-    def _db_add_user(self, username, password):
+    def _db_add_user(self, **kw):
+        username = kw.get('username')
+        password = kw.get('password')
+        contact = kw.get('contact', None)
+        email = kw.get('email', None)
+        phone = kw.get('phone', None)
+
         c = self._c
         s = self._s
+
         c.execute(
             '''
             insert into {db_table_users} 
-            ({db_users_name}, {db_users_password})
-            values (%s, %s)
+            (
+                {db_users_name}, 
+                {db_users_password}, 
+                {db_users_contact}, 
+                {db_users_email}, 
+                {db_users_phone}
+            )
+            values (%s, %s, %s, %s, %s)
             '''.format(
                 db_table_users = s.get('db', 'table_users'),
                 db_users_name = s.get('db', 'users_name'),
-                db_users_password = s.get('db', 'users_password')
+                db_users_password = s.get('db', 'users_password'),
+                db_users_contact = s.get('db', 'users_contact'),
+                db_users_email = s.get('db', 'users_email'),
+                db_users_phone = s.get('db', 'users_phone')
             ),
-            (username, password, )
+            (username, password, contact, email, phone, )
         )
         self._db.commit()
 
@@ -79,24 +95,17 @@ class User:
     def _sys_add_group(self, group):
         sudo.groupadd(group)
 
-    def _sys_add_user(self, username, home_dir, groups=[], comment=None):
-        args = ('-d', home_dir, '-m', username)
+    def _sys_add_user(self, username, home_dir, groups=[], comment=''):
+        if not home_dir:
+            raise DriverError('Must have home_dir')
 
-        if groups and not comment:
+        args = ('-d', home_dir, '-m', username, '-C', comment.encode('utf-8'))
+        ex_args = ()
+
+        if len(groups):
             ex_args = (
                 '-G', ','.join(groups)
             )
-        elif comment and not groups:
-            ex_args = (
-                '-c', comment
-            )
-        elif groups and comment:
-            ex_args = (
-                '-G', ','.join(groups),
-                '-c', "'" + comment.encode('utf-8') + "'"
-            )
-        else:
-            ex_args = ()
 
         ex_args += args
         sudo.useradd(*ex_args)
@@ -107,7 +116,23 @@ class User:
     def _sys_del_group(self, group):
         sudo.groupdel(group)
 
-    def adduser(self, username, password, home=None, groups=[], comment=None):
+    def adduser(self, **kw):
+        username = kw.get('username')
+        password = kw.get('password')
+        home = kw.get('home', None)
+        groups = kw.get('groups', [])
+        comment = kw.get('comment', '')
+        email = kw.get('email', None)
+        phone = kw.get('phone', None)
+
+        contact = comment
+
+        # If we have extra contact info then append it to the comment
+        if email:
+            comment = comment + '|' + email
+        if phone:
+            comment = comment + '|' + phone
+
         # Check if groups already exist so they can be used
         for group in groups:
             if group == username:
@@ -120,8 +145,14 @@ class User:
         # Check if username exists in DB and add it
         try:
             self._db_is_user(username)
-        except UserError:
-            self._db_add_user(username, password)
+        except DriverError:
+            self._db_add_user(
+                username = username, 
+                password = password,
+                contact = contact,
+                email = email,
+                phone = phone
+            )
 
         # Check if username exists in system and add it
         try:
@@ -136,12 +167,12 @@ class User:
             try:
                 self._sys_del_group(group)
             except Exception as e:
-                raise UserError('Could not delete group %s from system' % group)
+                raise DriverError('Could not delete group %s from system' % group)
 
         try:
             self._db_del_user(username)
         except Exception as e:
-            raise UserError('Could not delete user %s from db: %s' % (
+            raise DriverError('Could not delete user %s from db: %s' % (
                 username,
                 str(e)
             ))
@@ -149,9 +180,9 @@ class User:
         try:
             self._sys_del_user(username)
         except Exception as e:
-            raise UserError('Could not delete user %s from system' % username)
+            raise DriverError('Could not delete user %s from system' % username)
         
-class UserError(Exception):
+class DriverError(Exception):
     def __init__(self, errstr):
         self.errstr = errstr
 

@@ -7,7 +7,7 @@ import optparse
 
 from ConfigParser import ConfigParser
 s = ConfigParser()
-s.read(['app.cfg', '/etc/vsftpd/app.cfg'])
+s.read(['/etc/vsftpd/app.cfg', 'app.cfg'])
 
 path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))
 

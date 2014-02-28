@@ -11,7 +11,7 @@ import optparse
 
 from ConfigParser import ConfigParser
 s = ConfigParser()
-s.read('app.cfg')
+s.read(['app.cfg', '/etc/vsftpd/app.cfg'])
 
 path.append(join(abspath(dirname(__file__)), s.get('main', 'path')))
 
@@ -93,6 +93,7 @@ parser.add_option(
 
 (opts, args) = parser.parse_args()
 
+# Take final positional argument as username
 try:
     username = args[0]
 except:
@@ -100,6 +101,7 @@ except:
     parser.print_usage()
     exit(1)
 
+# Make default home dir
 if not opts.directory:
     opts.directory = s.get('system', 'home_dir') + '/' + username
 
@@ -137,7 +139,17 @@ if password:
     encrypted_password = crypt(password, salt)
 
 try:
-    user.adduser(username, encrypted_password, opts.directory, opts.groups.split(','), opts.comment)
+    user.adduser(
+        username = username, 
+        password = encrypted_password, 
+        home = opts.directory, 
+        groups = opts.groups.split(','), 
+        comment = opts.comment,
+        email = opts.email,
+        phone = opts.phone
+    )
+
+    # 4d-bug
     #print(username, encrypted_password, opts.directory, opts.groups.split(','), opts.comment)
 except Exception as e:
     print('Problem importing user=%s, groups=%s: %s' % (

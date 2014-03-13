@@ -50,21 +50,21 @@ parser.add_option(
 
 parser.add_option(
     '-C', '--comment',
-    metavar = 'Firstname Lastname',
+    metavar = '"Firstname Lastname"',
     type = 'string',
     help = 'Account contact person'
 )
 
 parser.add_option(
     '-E', '--email',
-    metavar = 'Email address',
+    metavar = '"Email address"',
     type = 'string',
     help = 'Contact persons e-mail address'
 )
 
 parser.add_option(
     '-P', '--phone',
-    metavar = 'Phone #',
+    metavar = 'Phone#',
     type = 'string',
     help = 'Contact persons phone number'
 )

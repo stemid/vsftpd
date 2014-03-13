@@ -26,6 +26,19 @@ from Driver.User import User
 
 user = User(s)
 
+def password_push(**config):
+    from urllib import urlencode
+    import urllib2
+
+    url = config.get('api_url')
+    values = {'password': config.get('password')}
+    data = urlencode(values)
+
+    req = urllib2.Request(url, data)
+    response = urllib2.urlopen(req)
+    json_response = loads(response)
+    return config.get('link_url') + '/' + json_response.get('code')
+
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',
     epilog = 'By Stefan.Midjich@cygate.se',
@@ -137,6 +150,47 @@ if password:
 
     # Encrypt password
     encrypted_password = crypt(password, salt)
+
+# Create password pusher link
+try:
+    pusher_link = password_push(
+        api_url = s.get('passwordpusher', 'api_url') + '/password',
+        password = opts.password,
+        link_url = s.get('passwordpusher', 'api_url')
+    )
+except Exception as e:
+    print('Problem creating password pusher link: %s' % str(e))
+
+# Show summary and request confirmation before executing user creation
+print(
+    '''
+    !!!PLEASE CONFIRM USER CREATION!!!
+
+    Username: %(username)s
+    Password: %(password)s
+    Home: %(home)s
+    Groups: %(groups)s
+    Contact: %(comment)s
+    E-mail: %(email)s
+    Phone#: %(phone)s
+    Quota: %(quota)s
+    Password pusher link: %(pusher_link)s
+    '''.format(
+        username = username,
+        password = opts.password,
+        home = opts.directory,
+        groups = opts.groups,
+        comment = opts.comment,
+        email = opts.email,
+        phone = opts.phone,
+        quota = human_quota,
+        pusher_link = pusher_link
+    )
+)
+
+confirm_answer = raw_input('Confirm with yes or no: ')
+if confirm_answer != 'yes':
+    exit(0)
 
 try:
     user.adduser(

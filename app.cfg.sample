@@ -1,0 +1,33 @@
+[main]
+# This must be the root path of the application, where the Driver directory is located.
+path: ..
+#virtualenv: 
+
+# Database settings
+[db]
+hostname: 
+username: root
+password: 
+database: vsftpd
+unicode: True
+
+# These are advanced DB driver settings that most new installs should not touch
+table_users: accounts
+users_id: accountid
+users_name: username
+users_password: password
+users_contact: contact
+users_email: email
+users_phone: phone
+
+# System settings, PATHs and environment
+[system]
+block_size: 4096
+useradd: /usr/sbin/useradd
+userdel: /usr/sbin/userdel
+id: /usr/bin/id
+setquota: /usr/sbin/setquota
+home_dir: /home
+
+[passwordpusher]
+api_url: https://pwpush.cygatehosting.se

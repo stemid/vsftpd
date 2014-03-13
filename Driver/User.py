@@ -181,7 +181,20 @@ class User:
             self._sys_del_user(username)
         except Exception as e:
             raise DriverError('Could not delete user %s from system' % username)
-        
+
+    def password_push(self, **config):
+        from urllib import urlencode
+        import urllib2
+
+        url = config.get('api_url')
+        values = {'password': config.get('password')}
+        data = urlencode(values)
+
+        req = urllib2.Request(url, data)
+        response = urllib2.urlopen(req)
+        json_response = loads(response)
+        return config.get('link_url') + '/' + json_response.get('code')
+
 class DriverError(Exception):
     def __init__(self, errstr):
         self.errstr = errstr

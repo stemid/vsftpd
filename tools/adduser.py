@@ -6,6 +6,9 @@ from os.path import join, abspath, dirname
 from termios import ECHO, TCSADRAIN, tcgetattr, tcsetattr
 from random import randint
 from crypt import crypt
+from json import loads
+from urllib import urlencode
+import urllib2
 import string
 import optparse
 
@@ -26,18 +29,23 @@ from Driver.User import User
 user = User(s)
 
 def password_push(**config):
-    from json import loads
-    from urllib import urlencode
-    import urllib2
-
     url = config.get('api_url')
     values = {'password': config.get('password')}
     data = urlencode(values)
 
     req = urllib2.Request(url, data)
     response = urllib2.urlopen(req)
-    json_response = loads(response)
-    return config.get('link_url') + '/' + json_response.get('code')
+    return loads(response.read())
+
+def get_random_password(**config):
+    url = config.get('api_url')
+    values = {}
+    data = urlencode(values)
+
+    req = urllib2.Request(url, data)
+    response = urllib2.urlopen(req)
+    json_response = loads(response.read())
+    return json_response.get('phrase')
 
 parser = optparse.OptionParser(
     description = 'Add a vsftpd user',
@@ -123,6 +131,7 @@ parser.add_option(
 )
 
 (opts, args) = parser.parse_args()
+password = None
 
 # Take final positional argument as username
 try:
@@ -140,10 +149,8 @@ if opts.prompt and opts.password:
     parser.error('Options --prompt and --password are mutually exclusive.')
     exit(1)
 
+# Prompt for password
 if opts.prompt:
-    if opts.verbose:
-        password_prompt = 'Enter password: '
-
     # Disable echo to stdout
     stdin_fd = stdin.fileno()
     old_stdin = tcgetattr(stdin_fd)
@@ -159,12 +166,29 @@ if opts.prompt:
         # Reset termcap config for stdin
         tcsetattr(stdin_fd, TCSADRAIN, old_stdin)
         stdout.write('\n') # Makes the following printed line better
-else:
-    if not opts.password:
-        # Generate random password
-    else:
+else: # Take cli argument provided password
+    if opts.password:
         password = opts.password
 
+# Request random password from pwpusher as last resort
+if not password:
+    random_password = get_random_password(
+        api_url = s.get('passwordpusher', 'api_url') + '/password'
+    )
+    password = random_password
+
+# Create password pusher link
+try:
+    pusher = password_push(
+        api_url = s.get('passwordpusher', 'api_url') + '/password',
+        password = password,
+        link_url = s.get('passwordpusher', 'api_url')
+    )
+    pusher_link = s.get('passwordpusher', 'api_url') + '/' + pusher.get('code')
+except Exception as e:
+    print('Problem creating password pusher link: %s' % str(e))
+
+# Encrypt password
 if password:
     # Generate salt for encryption
     salt_chars = '/.' + string.ascii_letters + string.digits
@@ -173,16 +197,6 @@ if password:
 
     # Encrypt password
     encrypted_password = crypt(password, salt)
-
-# Create password pusher link
-try:
-    pusher_link = password_push(
-        api_url = s.get('passwordpusher', 'api_url') + '/password',
-        password = opts.password,
-        link_url = s.get('passwordpusher', 'api_url')
-    )
-except Exception as e:
-    print('Problem creating password pusher link: %s' % str(e))
 
 # Show summary and request confirmation before executing user creation
 print(

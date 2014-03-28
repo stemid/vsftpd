@@ -116,6 +116,9 @@ class User:
     def _sys_del_group(self, group):
         sudo.groupdel(group)
 
+    def _sys_setquota(self, username, soft_quota, hard_quota):
+        sudo.setquota('-a', username, soft_quota, hard_quota, 0 0)
+
     def adduser(self, **kw):
         username = kw.get('username')
         password = kw.get('password')
@@ -124,8 +127,12 @@ class User:
         comment = kw.get('comment', '')
         email = kw.get('email', None)
         phone = kw.get('phone', None)
+        soft_quota, hard_quota = kw.get('quota')
 
         contact = comment
+
+        # Check that we have some quota set
+        #if len(soft_quota)
 
         # If we have extra contact info then append it to the comment
         if email:
@@ -181,19 +188,6 @@ class User:
             self._sys_del_user(username)
         except Exception as e:
             raise DriverError('Could not delete user %s from system' % username)
-
-    def password_push(self, **config):
-        from urllib import urlencode
-        import urllib2
-
-        url = config.get('api_url')
-        values = {'password': config.get('password')}
-        data = urlencode(values)
-
-        req = urllib2.Request(url, data)
-        response = urllib2.urlopen(req)
-        json_response = loads(response)
-        return config.get('link_url') + '/' + json_response.get('code')
 
 class DriverError(Exception):
     def __init__(self, errstr):

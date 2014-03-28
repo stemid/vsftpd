@@ -23,10 +23,10 @@ except:
     pass
 
 from Driver.User import User
-
 user = User(s)
 
 def password_push(**config):
+    from json import loads
     from urllib import urlencode
     import urllib2
 
@@ -91,10 +91,28 @@ parser.add_option(
 
 parser.add_option(
     '--password',
-    metavar = 'Secret2013',
+    metavar = '"Secret2013"',
     dest = 'password',
     type = 'string',
     help = 'Password of user'
+)
+
+parser.add_option(
+    '-q', '--soft-quota',
+    metavar = 'Size',
+    dest = 'soft_quota',
+    default = '50M',
+    type = 'string',
+    help = 'Soft quota limit. Symbols K, M, G, and T can be appended to numeric value to express kibibytes, mebibytes, gibibytes, and tebibytes. '
+)
+
+parser.add_option(
+    '-Q', '--hard-quota',
+    metavar = 'Size',
+    dest = 'hard_quota',
+    default = '60M',
+    type = 'string',
+    help = 'Hard quota limit. Symbols K, M, G, and T can be appended to numeric value to express kibibytes, mebibytes, gibibytes, and tebibytes. '
 )
 
 parser.add_option(
@@ -123,8 +141,6 @@ if opts.prompt and opts.password:
     exit(1)
 
 if opts.prompt:
-    # Prompt for a password from stdin
-    password_prompt = ''
     if opts.verbose:
         password_prompt = 'Enter password: '
 
@@ -134,13 +150,20 @@ if opts.prompt:
     new_stdin = tcgetattr(stdin_fd)
     new_stdin[3] = new_stdin[3] & ~ECHO
     try:
+        # Apply termcap config to stdin
         tcsetattr(stdin_fd, TCSADRAIN, new_stdin)
-        password = raw_input(password_prompt)
+        # Custom prompt since echo is disabled raw_input can't show any prompt
+        print('Password: ', end='')
+        password = raw_input()
     finally:
+        # Reset termcap config for stdin
         tcsetattr(stdin_fd, TCSADRAIN, old_stdin)
         stdout.write('\n') # Makes the following printed line better
 else:
-    password = opts.password
+    if not opts.password:
+        # Generate random password
+    else:
+        password = opts.password
 
 if password:
     # Generate salt for encryption
@@ -164,7 +187,9 @@ except Exception as e:
 # Show summary and request confirmation before executing user creation
 print(
     '''
-    !!!PLEASE CONFIRM USER CREATION!!!
+    !!! PLEASE CONFIRM USER CREATION !!!
+
+    No changes have been made yet.
 
     Username: %(username)s
     Password: %(password)s
@@ -173,17 +198,26 @@ print(
     Contact: %(comment)s
     E-mail: %(email)s
     Phone#: %(phone)s
-    Quota: %(quota)s
+    Soft Quota: %(soft_quota)s
+    Hard Quota: %(hard_quota)s
     Password pusher link: %(pusher_link)s
+
+    No changes have been made yet.
+    
+    When you confirm user will receive an e-mail with all this info, 
+    sans the cleartext password. 
+
+    !!! ARE YOU SURE THAT LOOKS OK? !!!
     '''.format(
         username = username,
-        password = opts.password,
+        password = password,
         home = opts.directory,
         groups = opts.groups,
         comment = opts.comment,
         email = opts.email,
         phone = opts.phone,
-        quota = human_quota,
+        soft_quota = opts.soft_quota,
+        hard_quota = opts.hard_quota,
         pusher_link = pusher_link
     )
 )
@@ -200,7 +234,8 @@ try:
         groups = opts.groups.split(','), 
         comment = opts.comment,
         email = opts.email,
-        phone = opts.phone
+        phone = opts.phone,
+        quota = (opts.soft_quota, opts.hard_quota)
     )
 
     # 4d-bug

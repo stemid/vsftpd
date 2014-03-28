@@ -117,7 +117,7 @@ class User:
         sudo.groupdel(group)
 
     def _sys_setquota(self, username, soft_quota, hard_quota):
-        sudo.setquota('-a', username, soft_quota, hard_quota, 0 0)
+        sudo.setquota('-a', username, soft_quota, hard_quota, 0, 0)
 
     def adduser(self, **kw):
         username = kw.get('username')

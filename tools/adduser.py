@@ -39,10 +39,8 @@ def password_push(**config):
 
 def get_random_password(**config):
     url = config.get('api_url')
-    values = {}
-    data = urlencode(values)
 
-    req = urllib2.Request(url, data)
+    req = urllib2.Request(url)
     response = urllib2.urlopen(req)
     json_response = loads(response.read())
     return json_response.get('phrase')

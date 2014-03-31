@@ -99,7 +99,7 @@ class User:
         if not home_dir:
             raise DriverError('Must have home_dir')
 
-        args = ('-d', home_dir, '-m', username, '-C', comment.encode('utf-8'))
+        args = ('-d', home_dir, '-m', username, '-C', "'%s'" % comment.encode('utf-8'))
         ex_args = ()
 
         if len(groups):
@@ -124,7 +124,7 @@ class User:
         password = kw.get('password')
         home = kw.get('home', None)
         groups = kw.get('groups', [])
-        comment = kw.get('comment', '').encode('utf-8')
+        comment = kw.get('comment', '')
         email = kw.get('email', None)
         phone = kw.get('phone', None)
         soft_quota, hard_quota = kw.get('quota')

@@ -156,7 +156,7 @@ class User:
             self._db_add_user(
                 username = username, 
                 password = password,
-                contact = contact,
+                contact = contact.encode('utf-8'),
                 email = email,
                 phone = phone
             )

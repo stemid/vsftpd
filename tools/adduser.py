@@ -203,16 +203,16 @@ print(
 
     No changes have been made yet.
 
-    Username: %(username)s
-    Password: %(password)s
-    Home: %(home)s
-    Groups: %(groups)s
-    Contact: %(comment)s
-    E-mail: %(email)s
-    Phone#: %(phone)s
-    Soft Quota: %(soft_quota)s
-    Hard Quota: %(hard_quota)s
-    Password pusher link: %(pusher_link)s
+    Username: {username}s
+    Password: {password}s
+    Home: {home}s
+    Groups: {groups}s
+    Contact: {comment}s
+    E-mail: {email}s
+    Phone#: {phone}s
+    Soft Quota: {soft_quota}s
+    Hard Quota: {hard_quota}s
+    Password pusher link: {pusher_link}s
 
     No changes have been made yet.
     

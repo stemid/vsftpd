@@ -246,7 +246,7 @@ try:
         password = encrypted_password, 
         home = opts.directory, 
         groups = opts.groups.split(','), 
-        comment = opts.comment,
+        comment = opts.comment.encode('utf-8'),
         email = opts.email,
         phone = opts.phone,
         quota = (opts.soft_quota, opts.hard_quota)

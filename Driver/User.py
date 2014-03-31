@@ -99,7 +99,7 @@ class User:
         if not home_dir:
             raise DriverError('Must have home_dir')
 
-        args = ('-d', home_dir, '-m', username, '-C', "'%s'" % comment)
+        args = ('-d', home_dir, '-m', username, '-c', "'%s'" % comment)
         ex_args = ()
 
         if len(groups):

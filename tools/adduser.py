@@ -39,7 +39,7 @@ def password_push(**config):
 
 def get_random_password(**config):
     url = config.get('api_url')
-    values = {'words': 4, 'bits': 12}
+    values = {'words': 4, 'bits': 10}
     data = urlencode(values)
 
     req = urllib2.Request(url + '?' + data)

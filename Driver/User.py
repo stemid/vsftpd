@@ -1,4 +1,3 @@
-from __future__ import print_function
 import MySQLdb as mysql
 from sh import sudo, id, grep, ErrorReturnCode_1
 
@@ -100,7 +99,6 @@ class User:
         if not home_dir:
             raise DriverError('Must have home_dir')
 
-        print('Debug')
         args = ('-d', home_dir, '-m', username, '-C', "'%s'" % comment)
         ex_args = ()
 

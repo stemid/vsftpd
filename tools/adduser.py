@@ -39,8 +39,10 @@ def password_push(**config):
 
 def get_random_password(**config):
     url = config.get('api_url')
+    values = {'words': 4, 'bits': 12}
+    data = urlencode(values)
 
-    req = urllib2.Request(url)
+    req = urllib2.Request(url + '?' + data)
     response = urllib2.urlopen(req)
     json_response = loads(response.read())
     return json_response.get('phrase')
@@ -203,16 +205,16 @@ print(
 
     No changes have been made yet.
 
-    Username: {username}s
-    Password: {password}s
-    Home: {home}s
-    Groups: {groups}s
-    Contact: {comment}s
-    E-mail: {email}s
-    Phone#: {phone}s
-    Soft Quota: {soft_quota}s
-    Hard Quota: {hard_quota}s
-    Password pusher link: {pusher_link}s
+    Username: {username}
+    Password: {password}
+    Home: {home}
+    Groups: {groups}
+    Contact: {comment}
+    E-mail: {email}
+    Phone#: {phone}
+    Soft Quota: {soft_quota}
+    Hard Quota: {hard_quota}
+    Password pusher link: {pusher_link}
 
     No changes have been made yet.
     
@@ -253,7 +255,7 @@ try:
     # 4d-bug
     #print(username, encrypted_password, opts.directory, opts.groups.split(','), opts.comment)
 except Exception as e:
-    print('Problem importing user=%s, groups=%s: %s' % (
+    print('Problem adding user=%s, groups=%s: %s' % (
         username.encode('utf-8'), 
         opts.groups.split(','), 
         str(e)

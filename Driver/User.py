@@ -124,7 +124,7 @@ class User:
         password = kw.get('password')
         home = kw.get('home', None)
         groups = kw.get('groups', [])
-        comment = kw.get('comment', '')
+        comment = kw.get('comment', '').encode('utf-8')
         email = kw.get('email', None)
         phone = kw.get('phone', None)
         soft_quota, hard_quota = kw.get('quota')
